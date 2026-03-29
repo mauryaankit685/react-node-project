@@ -6,6 +6,22 @@ const app = express();
 // order of route is matter 
 
 
+app.use('/admin', adminAuth)
+
+app.get('/user', userAuth, (req, res) => {
+    // middleware
+    res.send('user is here')
+})
+
+app.get('/admin/user', (req, res) => {
+    // middleware
+    res.send('data set successfully')
+})
+
+app.delete('/admin/remove', (req, res) => {
+    // middleware
+    res.send('data deleted successfully')
+})
 
 
 
