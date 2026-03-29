@@ -1,0 +1,102 @@
+const express = require("express")
+
+const app = express();
+
+
+// order of route is matter 
+
+
+
+
+
+// middleware is a checkpoint that is checking/modifing/stoping before reaching the request to the final api
+
+app.use('/admin', (req, res, next) => {
+    const token = 'xyz'
+    const auth = 'xyz'
+    if (token == auth) {
+        next()
+    }
+    else {
+        res.status(401).send("you are not a authorized user")
+    }
+})
+
+app.get('/admin/user', (req, res) => {
+    // middleware
+    res.send('data set successfully')
+})
+
+app.delete('/admin/remove', (req, res) => {
+    // middleware
+    res.send('data deleted successfully')
+})
+
+
+
+
+app.use('/user',
+    (req, res, next) => {
+        next()
+
+    },
+    (req, res, next) => {
+
+        next()
+    },
+    (req, res) => {
+        res.send('3nd response')
+    }
+)
+
+// we can add route inside in array like below all are the valid
+
+// app.get('/user',[rh1,rh2],rh3,rh4)
+// app.get('/user',rh1,[rh2],rh3,rh4)
+// app.get('/user',[rh1,rh2,rh3,rh4])
+
+
+// app.get("/user/:userid/:pass", (req, res) => { // /user/777
+//     console.log(req.params)
+
+//     res.send("Hello from user to get user id")
+// })
+
+// app.get("/user", (req, res) => {
+//     console.log(req.query)
+//     res.send("Hello from user")
+// })
+
+
+//  will both /ac or /abc  -> just like regular expressions * + all are can add and we can add regex directly
+// app.get("/ab?c", (req, res) => {
+//     res.send("Hello from user")
+// })
+
+// app.post("/user", (req, res) => {
+//     res.send("user is post")
+// })
+
+// app.delete("/user", (req, res) => {
+//     res.send("user is deleted")
+// })
+
+// app.use("/test/2", (req, res) => {
+//     res.send("Hello from /test/2")
+// })
+
+// app.use("/test", (req, res) => {
+//     res.send("Hello from /test")
+// })
+
+// app.use((req, res) => {
+//     res.send("Hello from 3001 server is running now.")
+// })
+
+// app.use("/", (req, res) => {
+//     res.send("Hello from /")
+// })
+
+app.listen("3001", () => {
+    console.log("server successfully listining")
+});
