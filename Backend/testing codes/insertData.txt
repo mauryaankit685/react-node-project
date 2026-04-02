@@ -8,7 +8,13 @@ app.use(express.json())
 
 app.post("/signup", async (req, res) => {
     // console.log(req.body)
-    const user = new User(req.body)
+    const user = new User({
+        firstName: "virat",
+        lastName: "kohli",
+        gender: "male",
+        emailId: "virat@gmail.com",
+        password: "virat@123"
+    })
     try {
         await user.save(user);
         res.send("Data is successfully saved");
