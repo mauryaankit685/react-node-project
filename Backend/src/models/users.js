@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     lastName: {
         type: String
     },
-    emaiId: {
+    emailId: {
         type: String
     },
     password: {
@@ -24,3 +24,5 @@ const userSchema = new mongoose.Schema({
 // module.exports = UserModel;
 
 module.exports = mongoose.model('User', userSchema);
+
+//Mongoose automatically: Converts name to lowercase , Converts to plural. model->User then collection -> users

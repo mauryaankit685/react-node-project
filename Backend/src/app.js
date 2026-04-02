@@ -16,6 +16,23 @@ app.post("/signup", async (req, res) => {
     catch (err) {
         res.status(400).send('data is not submitted. please contact to support team' + err.message)
     }
+})
+
+app.get('/user', async (req, res) => {
+    const userEmail = req.body.emailId;
+
+    try {
+        const user = await User.find({ emailId: userEmail })
+        if (user.length === 0) {
+            res.status(404).send("user not found");
+        }
+        else {
+            res.send(user)
+        }
+    }
+    catch (err) {
+        await res.status(400).send("Connot read request " + err);
+    }
 
 })
 
@@ -31,9 +48,9 @@ connectDb()
     })
 
 
-app.get('/userData', (req, res) => {
-    res.send('userData')
-})
+// app.get('/userData', (req, res) => {
+//     res.send('userData')
+// })
 
 // app.use('/', (err, req, res, next) => {
 //     if (err) {
