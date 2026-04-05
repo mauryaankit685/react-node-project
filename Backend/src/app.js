@@ -10,7 +10,7 @@ app.post("/signup", async (req, res) => {
     // console.log(req.body)
     const user = new User(req.body)
     try {
-        await user.save(user);
+        await user.save();
         res.send("Data is successfully saved");
     }
     catch (err) {
@@ -35,6 +35,58 @@ app.get('/user', async (req, res) => {
     }
 
 })
+
+app.get('/feed', async (req, res) => {
+
+    try {
+        const user = await User.find({})
+        if (user.length === 0) {
+            res.status(404).send("user not found");
+        }
+        else {
+            res.send(user)
+        }
+    }
+    catch (err) {
+        await res.status(400).send("Connot read request " + err);
+    }
+
+})
+
+app.delete('/user', async (req, res) => {
+    try {
+        const emailId = req.body.emailId;
+        const user = await User.findOneAndDelete(emailId)
+        res.send("user deleted successfully....")
+    }
+    catch (err) {
+        await res.status(400).send("Connot read request " + err);
+    }
+})
+
+app.patch('/user/:userId', async (req, res) => {
+    const userId = req.params?.userId;
+    const data = req.body;
+
+    try {
+        const ALLOWED_UPDATE = ['age', 'gender', 'photoUrl', 'skills'];
+        const isUpdateAllowed = Object.keys(data).every((k) =>
+            ALLOWED_UPDATE.includes(k)
+        )
+
+        if (!isUpdateAllowed) {
+            throw new Error("updates are not allowed")
+        }
+        const user = await User.findByIdAndUpdate({ _id: userId }, data, { returnDocument: "after", runValidators: true })// returnDocument: "after" istead of this we can use new : true
+
+        res.send("data is updated .......")
+    }
+    catch (err) {
+        await res.status(400).send("invalid request " + err.message);
+    }
+
+})
+
 
 connectDb()
     .then(() => {
