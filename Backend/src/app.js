@@ -98,22 +98,3 @@ connectDb()
     .catch((err) => {
         console.error("Opps... Database is not connected!")
     })
-
-
-// app.get('/userData', (req, res) => {
-//     res.send('userData')
-// })
-
-// app.use('/', (err, req, res, next) => {
-//     if (err) {
-//         console.log(err)
-//         res.status(500).send("somthing went wrong")
-
-//     }
-// })
-
-
-
-
-
-
