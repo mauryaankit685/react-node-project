@@ -2,19 +2,27 @@ const express = require("express")
 // const { adminAuth, userAuth } = require('./middlewares/auth')
 const connectDb = require("./config/database")
 const User = require('./models/users')
+const { valitateSignupData } = require('./utils/validation')
 const app = express();
+const bcrypt = require('bcrypt')
 
 app.use(express.json())
 
 app.post("/signup", async (req, res) => {
-    // console.log(req.body)
-    const user = new User(req.body)
+
+
     try {
+        const { firstName, lastName, emailId, password } = req.body
+        valitateSignupData(req);
+
+
+        const hashPassword = await bcrypt.hash(password, 10)
+        const user = new User({ firstName, lastName, emailId, password: hashPassword })
         await user.save();
         res.send("Data is successfully saved");
     }
     catch (err) {
-        res.status(400).send('data is not submitted. please contact to support team' + err.message)
+        res.status(400).send('ERROR: ' + err.message)
     }
 })
 

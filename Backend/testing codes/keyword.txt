@@ -2,3 +2,4 @@ npm validator -> for validations
 expressjs -> a web frame for for json
 schema-> is the structure of the data
 model -> help to connect/intrect with the DB.
+bcrypt -> help to dcrypt the password
