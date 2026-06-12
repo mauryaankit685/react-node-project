@@ -1,12 +1,15 @@
 const express = require("express")
-// const { adminAuth, userAuth } = require('./middlewares/auth')
+const { adminAuth, userAuth } = require('./middlewares/auth')
 const connectDb = require("./config/database")
 const User = require('./models/users')
 const { valitateSignupData } = require('./utils/validation')
 const app = express();
 const bcrypt = require('bcrypt')
-
+const validator = require("validator")
+const cookieParser = require('cookie-parser')
+const jwt = require("jsonwebtoken")
 app.use(express.json())
+app.use(cookieParser())
 
 app.post("/signup", async (req, res) => {
 
@@ -26,11 +29,57 @@ app.post("/signup", async (req, res) => {
     }
 })
 
+app.get("/profile", userAuth, async (req, res) => {
+
+    try {
+
+        const user = req.user;
+        res.send(user)
+    }
+    catch (err) {
+        res.status(400).send('ERROR: ' + err.message)
+    }
+})
+
+app.post('/login', async (req, res) => {
+
+    try {
+
+        const { emailId, password } = req.body;
+
+        if (!validator.isEmail(emailId)) {
+            throw new Error("Email id is not valid")
+        }
+        else {
+            const user = await User.findOne({ emailId: emailId });
+            if (!user) {
+                throw new Error("email is not present!")
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password)
+            // await bcrypt.compare('enteered password', "increpted password")
+
+            if (isPasswordValid) {
+                const token = jwt.sign({ _id: user._id }, "randoem@123", { expiresIn: "7d" }) // expire in 7 days
+                res.cookie('token', token)
+                res.send("Login successful !")
+            }
+            else {
+                throw new Error("password is not valid!")
+            }
+        }
+    }
+    catch (err) {
+        res.status(400).send('ERROR: ' + err.message)
+    }
+})
+
 app.get('/user', async (req, res) => {
     const userEmail = req.body.emailId;
 
     try {
         const user = await User.find({ emailId: userEmail })
+        console.log(user);
         if (user.length === 0) {
             res.status(404).send("user not found");
         }
