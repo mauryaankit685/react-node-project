@@ -55,12 +55,12 @@ app.post('/login', async (req, res) => {
             if (!user) {
                 throw new Error("email is not present!")
             }
-
-            const isPasswordValid = await bcrypt.compare(password, user.password)
+            const isPasswordValid = await user.passwordValidation(password);
+            // const isPasswordValid = await bcrypt.compare(password, user.password)
             // await bcrypt.compare('enteered password', "increpted password")
 
             if (isPasswordValid) {
-                const token = jwt.sign({ _id: user._id }, "randoem@123", { expiresIn: "7d" }) // expire in 7 days
+                const token = await user.getJWT();
                 res.cookie('token', token)
                 res.send("Login successful !")
             }
