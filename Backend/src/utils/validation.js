@@ -1,5 +1,5 @@
 const validator = require("validator")
-const valitateSignupData = (req) => {
+const validateSignupData = (req) => {
     const { firstName, lastName, emailId, password } = req.body;
     if (!firstName || !lastName) {
         throw new Error("Name is not valid!");
@@ -17,4 +17,15 @@ const valitateSignupData = (req) => {
         throw new Error("Your password is week please enter strong password!")
     }
 }
-module.exports = { valitateSignupData };
+
+const validateEditProfileData = (req) => {
+    const allowedEditFields = ['firstName', 'lastName', 'about', 'skills'];
+    const isEditAllowed = Object.keys(req.body).every((k) =>
+        allowedEditFields.includes(k)
+    )
+    if (!isEditAllowed) {
+        throw new Error("Invalid fields for profile edit!");
+    }
+}
+
+module.exports = { validateSignupData, validateEditProfileData };

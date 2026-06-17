@@ -7,3 +7,4 @@ model -> help to connect/intrect with the DB.
 bcrypt -> help to dcrypt the password
 cookie-parser -> parse the cookies
 jsonwebtoken-> generate / varify the token
+Express router
