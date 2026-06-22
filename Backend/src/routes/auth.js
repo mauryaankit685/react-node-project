@@ -65,4 +65,23 @@ router.post('/logout', async (req, res) => {
     res.send("Logout successful !")
 })
 
+
+router.post('/resetPassword', userAuth, async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const finalUser = req.user;
+    console.log(finalUser)
+    try {
+        const isPasswordValid = await finalUser.passwordValidation(oldPassword);
+        if (!isPasswordValid) {
+            throw new Error("Old password is not valid!");
+        }
+        const hashNewPassword = await bycrypt.hash(newPassword, 10);
+        finalUser.password = hashNewPassword;
+        await finalUser.save();
+        res.send("Password updated successfully!");
+    } catch (err) {
+        res.status(400).send('ERROR: ' + err.message);
+    }
+});
+
 module.exports = router;

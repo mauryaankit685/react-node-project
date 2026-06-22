@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     emailId: {
         type: String,
-        unique: true,
+        unique: true, // this will create a unique index on emailId field, so that no two documents can have the same emailId value.
         required: true,
         lowercase: true,
         trim: true,

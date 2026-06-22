@@ -7,7 +7,7 @@ app.use(cookieParser())
 
 const authRoute = require("./routes/auth")
 const profileRoute = require("./routes/profile")
-const requestRoute = require("./routes/requests")
+const requestRoute = require("./routes/request")
 
 app.use("/", authRoute)
 app.use("/", profileRoute)

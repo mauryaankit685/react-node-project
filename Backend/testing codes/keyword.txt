@@ -8,3 +8,4 @@ bcrypt -> help to dcrypt the password
 cookie-parser -> parse the cookies
 jsonwebtoken-> generate / varify the token
 Express router
+schema.pre ->middleware
