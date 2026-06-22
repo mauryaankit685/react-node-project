@@ -28,7 +28,7 @@ connectionRequestSchema.pre("save", async function (next) {
 
 });
 
-connnectionRequestSchema.index({ fromUserId: 1, toUserId: 1 }, { unique: true });
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 }); // 
 
 const ConnectionRequestModel = mongoose.model("ConnectionRequest", connectionRequestSchema)
 module.exports = ConnectionRequestModel;
