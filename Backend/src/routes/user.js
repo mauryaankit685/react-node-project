@@ -44,6 +44,11 @@ requestsRouter.post('/user/connections', userAuth, async (req, res) => {
 
 requestsRouter.post('/feed', userAuth, async (req, res) => {
     try {
+        let limit = parseInt(req.query.limit) || 10; // Default limit to 10 if not provided
+        const page = parseInt(req.query.page) || 1; // Default page to 1 if not provided
+        const skip = (page - 1) * limit;
+        limit = limit > 50 ? 50 : limit; // Limit the maximum number of users to 50
+
         const userId = req.user._id;
         const conectionRequests = await ConnectionRequestModel.find({
             $or: [
@@ -68,6 +73,7 @@ requestsRouter.post('/feed', userAuth, async (req, res) => {
             ]
 
         }).select('firstName lastName gender about')
+            .skip(skip).limit(limit);
         res.status(200).json({ message: "Feed fetched successfully", data: users });
     }
     catch (err) {
